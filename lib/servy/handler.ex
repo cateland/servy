@@ -5,6 +5,7 @@ defmodule Servy.Handler do
     @pages_path Path.expand("../../pages", __DIR__)
 
     import Servy.Plugins, only: [rewrite_path: 1, track: 1]
+    import Servy.Parser, only: [parse: 1]
 
     @doc "Transform request into a response"
     def handle(request)do
@@ -15,22 +16,6 @@ defmodule Servy.Handler do
         |> route
         |> track
         |> format_response
-    end
-
-
-    def parse(request) do
-        [method, path, _] =
-            request 
-            |> String.split("\n") 
-            |> List.first
-            |> String.split(" ")
-
-        %{
-            method: method,
-            path: path,
-            status: nil,
-            resp_body: ""
-        }
     end
 
     def route(%{ method: "GET", path: "/bears"} = conv) do
